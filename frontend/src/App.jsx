@@ -216,6 +216,7 @@ export default function App() {
             <thead>
               <tr>
                 <th>#</th>
+                <th />
                 <th>Candidato</th>
                 <th>Último puesto</th>
                 <th className="num">Exp.</th>
@@ -238,6 +239,28 @@ export default function App() {
                     onClick={() => setElegida(f)}
                   >
                     <td className="posicion">{f.puesto}</td>
+                    <td className="iconos">
+                      {/* El clic no sube a la fila, o se abrirían las dos cosas a la vez. */}
+                      {f.cvUrl && (
+                        <a
+                          href={f.cvUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="icono"
+                          title={`Ver el currículum de ${f.datos?.nombre || f.candidato}`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          👁
+                        </a>
+                      )}
+                      <button
+                        className="icono"
+                        title="Ver el puntaje y lo que la IA encontró"
+                        onClick={(e) => { e.stopPropagation(); setElegida(f) }}
+                      >
+                        📊
+                      </button>
+                    </td>
                     <td>
                       {f.datos?.nombre || f.candidato}
                       {f.pasada === 'RAPIDA' && (
@@ -269,7 +292,17 @@ export default function App() {
             </p>
           )}
 
-          {elegida && <Ficha fila={elegida} onCambio={recargar} />}
+          {elegida && (
+            <Ficha
+              // La clave hace que cambiar de candidato monte una ventana nueva en vez de
+              // reusar la anterior, que se quedaría con el retrato del otro medio segundo.
+              key={elegida.postulacionId}
+              fila={elegida}
+              onCambio={recargar}
+              onCerrar={() => setElegida(null)}
+              carpetaCv={vacantes.find((v) => v.id === vacanteId)?.carpetaCv}
+            />
+          )}
         </>
       )}
     </div>
