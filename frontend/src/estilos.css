@@ -330,9 +330,11 @@ tbody tr:hover .icono { opacity: 1; }
   color: var(--tinta);
   width: min(1100px, calc(100vw - 3rem));
   max-height: calc(100vh - 3rem);
-  box-shadow: 0 12px 40px rgb(0 0 0 / 18%);
+  /* La sombra y el fondo salen de la tinta de la paleta, no de negro puro: asi la
+     ventana se apoya sobre el mismo gris calido del resto y no sobre un agujero. */
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--tinta) 18%, transparent);
 }
-.modal::backdrop { background: rgb(13 13 13 / 45%); }
+.modal::backdrop { background: color-mix(in srgb, #0d0d0d 45%, transparent); }
 .modal-caja { padding: 1.5rem 1.75rem 2rem; }
 
 /* La ficha dentro de la ventana no necesita su propio marco: ya lo tiene. */
