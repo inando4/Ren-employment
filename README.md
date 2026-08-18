@@ -52,6 +52,25 @@ npm install
 npm run dev
 ```
 
+## Antes del primer push del frontend
+
+Dos cosas que hacen fallar el build en silencio:
+
+**Gestor de paquetes.** El workflow usa `npm ci` si encuentra `package-lock.json`,
+y `npm install` si no. Si el proyecto usa **pnpm o yarn**, sube su lockfile y
+avisa para adaptar el workflow: `npm install` puede fallar con proyectos pnpm.
+
+**Si el proyecto es Create React App**, revisa el campo `homepage` de
+`package.json`. CRA le da prioridad sobre la variable `PUBLIC_URL` que inyecta
+el workflow, así que si viene de otro despliegue con un valor viejo, el build
+usará la ruta equivocada. Debe ser exactamente:
+
+```json
+"homepage": "https://inando4.github.io/Ren-employment"
+```
+
+O bórralo y deja que el workflow lo controle.
+
 ## Notas
 
 - Pages sirve **solo el frontend**. El backend necesita hosting propio y debe
